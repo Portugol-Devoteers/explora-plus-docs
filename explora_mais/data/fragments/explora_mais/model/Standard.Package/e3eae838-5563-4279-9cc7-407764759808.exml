@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Model" version="4">
+  <OBJECT>
+    <ID name="Model" mc="Standard.Package" uid="e3eae838-5563-4279-9cc7-407764759808"/>
+    <PID name="explora_mais" mc="Standard.Project" uid="1fef8d90-2ed3-4c82-995a-fbbe98deae45"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Model]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Category" mc="Standard.Class" uid="136d25ed-de0e-4227-a072-d1f32bfe04d2"/>
+        <COMPID name="Place" mc="Standard.Class" uid="12c7c3ee-651b-408e-be47-3c2c62a274e2"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="Model Class diagram" mc="Standard.ClassDiagram" uid="19646b8b-8e5d-4eda-ae1b-ee8637b01987"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

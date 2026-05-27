@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="explora_mais" version="4">
+  <OBJECT>
+    <ID name="explora_mais" mc="Standard.Package" uid="5981e622-f35a-482f-a6f1-94b88d2a3c4e"/>
+    <PID name="explora_mais" mc="Standard.Project" uid="1fef8d90-2ed3-4c82-995a-fbbe98deae45"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[explora_mais]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Visitante" mc="Standard.Actor" uid="70e3e6a7-0222-49ac-9e47-343671ca70de"/>
+        <COMPID name="Turista" mc="Standard.Actor" uid="11078d8f-a981-43ea-af4e-2a3acd11f691"/>
+        <COMPID name="Admin" mc="Standard.Actor" uid="3537aff9-c920-46e9-9c95-b06b93ae8937"/>
+        <COMPID name="Buscar Lugares" mc="Standard.UseCase" uid="7bf626a2-a6a7-4630-ba76-917fe717f4cb"/>
+        <COMPID name="Filtrar por Categorias" mc="Standard.UseCase" uid="68e45431-8877-454d-ab2a-2ad923013a16"/>
+        <COMPID name="Ver detalhes do Lugar" mc="Standard.UseCase" uid="ad53a00d-d2a6-4fe1-bbd2-57e32a2bd268"/>
+        <COMPID name="Criar conta / Login" mc="Standard.UseCase" uid="df00a14e-fac9-47a2-8980-f359b3048afc"/>
+        <COMPID name="Gerar Rota Inteligente" mc="Standard.UseCase" uid="fe845b0a-3710-43ac-8575-fd1e03c57530"/>
+        <COMPID name="Escolher modo de Transporte" mc="Standard.UseCase" uid="485d31f1-3751-46b5-b45e-22961b15fe55"/>
+        <COMPID name="Iniciar Navegação" mc="Standard.UseCase" uid="11551a45-3f9a-4ee3-9033-12dd7f6e175d"/>
+        <COMPID name="Comprar Ingressos" mc="Standard.UseCase" uid="8111f61c-80e6-499f-ac34-68a4dacba49f"/>
+        <COMPID name="Ver meus Ingressos" mc="Standard.UseCase" uid="7b2af108-96c0-4766-9644-e7d2fdc3609b"/>
+        <COMPID name="Editar Perfil" mc="Standard.UseCase" uid="78cf5f21-5aaa-4bfc-a927-338e927169e1"/>
+        <COMPID name="Cadastrar Lugar" mc="Standard.UseCase" uid="4af33531-5c38-4c40-bef4-80762a3f9d5d"/>
+        <COMPID name="Editar Lugar" mc="Standard.UseCase" uid="09333c24-0ba4-4688-8f06-f403c0638f82"/>
+        <COMPID name="Gerenciar Contas" mc="Standard.UseCase" uid="deaaf7b1-c030-491c-a1d5-fb6dc4dc115c"/>
+        <COMPID name="Visualizar Rotas e Ingressos" mc="Standard.UseCase" uid="e0722f2b-0a72-4740-875b-3ef6c313c0b9"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="explora_mais Use Case diagram" mc="Standard.UseCaseDiagram" uid="6d9b8595-14ce-461e-bd5e-a0105718e474"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
