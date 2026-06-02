@@ -1,36 +1,29 @@
 flowchart TD
-    Start([Inicio]) --> OpenApp[Abrir app]
-    OpenApp --> AuthCheck{Sessao\nautenticada?}
+    Start([Inicio]) --> AuthCheck{Autenticado?}
 
-    AuthCheck -->|Sim| TryCurrentRoute[GET /api/tour-routes/current/]
-    TryCurrentRoute --> RoutFound{Rota salva\nencontrada?}
-    RoutFound -->|200 OK| ShowRoute[Exibe rota salva]
-    RoutFound -->|404| GenDefault[Gera rota padrao\nPOST /api/tour-routes/]
+    AuthCheck -->|Sim| TryCurrent[GET current route]
+    TryCurrent --> Found{Rota salva?}
+    Found -->|Sim| ShowRoute[Carrega rota salva]
+    Found -->|Nao| GenRoute[POST tour-routes\nrota padrao]
 
-    AuthCheck -->|Nao| GenAnon[Gera rota anonima\nPOST /api/tour-routes/]
+    AuthCheck -->|Nao| GenRoute
 
-    ShowRoute --> RenderMap
-    GenDefault --> RenderMap
-    GenAnon --> RenderMap[Renderiza mapa Leaflet\n+ polyline + marcadores]
+    ShowRoute --> Map[Mapa Leaflet\npolyline + POIs]
+    GenRoute --> Map
 
-    RenderMap --> Idle{Aguarda\ninteracao}
+    Map --> Idle{Interacao}
 
-    Idle -->|Filtro categoria| Filter[Atualiza visibilidade\ndos marcadores no mapa]
+    Idle -->|Filtro| Filter[Filtra marcadores\npor categoria]
     Filter --> Idle
 
-    Idle -->|Toca marcador\nou item da lista| OpenDetail[GET /api/tour-routes/pois/stop_id/]
-    OpenDetail --> Modal[Exibe TourPoiDetailModal\nimagem + resumo + botoes]
+    Idle -->|Toca POI| Detail[GET pois/stop_id\nModal de detalhe]
 
-    Modal -->|Marcar visitado| PatchVisited[PATCH .../state/\nbody: state=visited]
-    PatchVisited --> UpdateRoute[Atualiza rota e mapa\nstop vai para Ja visitados]
-    UpdateRoute --> CloseModal
+    Detail -->|Visitado| Patch[PATCH state=visited\nRecalcula rota]
+    Patch --> Map
 
-    Modal -->|Excluir da rota| DeleteStop[DELETE .../stops/stop_id/]
-    DeleteStop --> RebuildRoute[Reconstroi rota\nsem o stop]
-    RebuildRoute --> CloseModal
+    Detail -->|Excluir| Delete[DELETE stop\nReconstroi rota]
+    Delete --> Map
 
-    Modal -->|Fechar| CloseModal[Fecha modal]
-    CloseModal --> Idle
+    Detail -->|Fechar| Idle
 
-    Idle -->|Recalcular rota| NewRoute[POST /api/tour-routes/\nnova origem e destino]
-    NewRoute --> RenderMap
+    Idle -->|Recalcular| GenRoute

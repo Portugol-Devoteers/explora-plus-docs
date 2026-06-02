@@ -36,7 +36,7 @@
 % Identacao do primeiro paragrafo
 \usepackage{indentfirst}
 
-% Titulos de secao sem numeracao excessiva
+% Titulos de secao
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 
@@ -50,31 +50,57 @@
 }
 
 % -----------------------------------------------------------
-% CAPA
-% -----------------------------------------------------------
-\title{
-  \vspace{-1cm}
-  \large \textbf{Universidade Cat\'olica de Santos} \\
-  \large Curso de Ci\^encia da Computa\c{c}\~ao \\[1.5cm]
-  \LARGE \textbf{Explora+} \\[0.5cm]
-  \large Relat\'orio T\'ecnico --- MVP Entregue
-}
-\author{
-  Felipe Barbosa dos Santos \\
-  Felipe de Lima Monteiro \\
-  Lucas Carmona Neto \\
-  Lucas Cerqueira Galv\~ao \\
-  Jo\~ao Gabriel Henriques Cardoso
-}
-\date{Santos -- SP, junho de 2026}
-
-% -----------------------------------------------------------
 \begin{document}
 
-\maketitle
-\thispagestyle{empty}
-\newpage
+% -----------------------------------------------------------
+% CAPA
+% -----------------------------------------------------------
+\begin{titlepage}
+\newgeometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
 
+% Brasao no canto superior esquerdo
+\noindent
+\begin{minipage}[t]{0.18\textwidth}
+  \includegraphics[height=2.8cm]{figuras/brasao-unisantos.png}
+\end{minipage}%
+\begin{minipage}[t]{0.82\textwidth}
+  \vspace{0.3cm}
+  {\large\bfseries UNIVERSIDADE CAT\'OLICA DE SANTOS}\\[0.25cm]
+  {\large Ci\^encia da Computa\c{c}\~ao}
+\end{minipage}
+
+\vfill
+
+% Titulo centralizado
+\begin{center}
+  {\fontsize{42}{50}\selectfont\bfseries Explora+}\\[1.2cm]
+  {\LARGE\bfseries Entrega de Prot\'otipo}
+\end{center}
+
+\vfill\vfill
+
+% Autores alinhados a esquerda
+\begin{flushleft}
+{\large
+  Felipe Barbosa dos Santos\\[0.3cm]
+  Felipe de Lima Monteiro\\[0.3cm]
+  Lucas Carmona Neto\\[0.3cm]
+  Lucas Cerqueira Galv\~ao\\[0.3cm]
+  Jo\~ao Gabriel Henriques Cardoso
+}
+\end{flushleft}
+
+\vspace{1.8cm}
+
+% Data centralizada no rodape
+\begin{center}
+  {\large Santos -- SP, junho de 2026}
+\end{center}
+
+\restoregeometry
+\end{titlepage}
+
+\thispagestyle{empty}
 \tableofcontents
 \newpage
 
@@ -260,10 +286,11 @@ Ao marcar um POI como visitado (\texttt{PATCH .../stops/\{stop\_id\}/state/}), o
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{figuras/atividade-explorar.png}
+  \includegraphics[height=0.82\textheight, keepaspectratio]{figuras/atividade-explorar.png}
   \caption{Diagrama de atividade -- Fluxo da ExploreScreen}
 \end{figure}
 
+\clearpage
 \subsection{MVP Entregue}
 
 \subsubsection{Funcionalidades implementadas}
