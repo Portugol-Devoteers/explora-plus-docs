@@ -2,7 +2,7 @@ flowchart TB
     subgraph Frontend["Aplicativo (Expo + React Native)"]
         Screens[Telas\nExploreScreen / PlacesScreen / ProfileScreen]
         Auth[AuthContext\nJWT tokens]
-        Services[Services\napi.ts / tourRoutes.ts / auth.ts]
+        Services[Services\napi.ts interceptor 401 + refresh\ntourRoutes.ts / auth.ts]
         Map[MapView\nLeaflet via WebView/iframe]
         Screens --> Auth
         Screens --> Services

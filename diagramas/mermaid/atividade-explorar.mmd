@@ -11,7 +11,8 @@ flowchart TD
     ShowRoute --> Map[Mapa Leaflet\npolyline + POIs]
     GenRoute --> Map
 
-    Map --> Idle{Interacao}
+    Map --> Prefetch[Pre-busca detalhes\nde todos os POIs\nem background]
+    Prefetch --> Idle{Interacao}
 
     Idle -->|Filtro| Filter[Filtra marcadores\npor categoria]
     Filter --> Idle

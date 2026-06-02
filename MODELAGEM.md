@@ -502,12 +502,13 @@ flowchart TD
     GenDefault --> RenderMap
     GenAnon --> RenderMap[Renderiza mapa Leaflet\npolyline + marcadores]
 
-    RenderMap --> Idle{Aguarda\ninteracao}
+    RenderMap --> Prefetch[Pre-busca detalhes de todos os POIs\nem background com 400ms de intervalo]
+    Prefetch --> Idle{Aguarda\ninteracao}
 
     Idle -->|Filtro categoria| Filter[Atualiza visibilidade\ndos marcadores]
     Filter --> Idle
 
-    Idle -->|Toca marcador ou item| OpenDetail[GET /api/tour-routes/pois/stop_id/]
+    Idle -->|Toca marcador ou item| OpenDetail[GET pois/stop_id\ninstantaneo se pre-buscado]
     OpenDetail --> Modal[Exibe TourPoiDetailModal]
 
     Modal -->|Marcar visitado| PatchVisited[PATCH .../state/ visited]
