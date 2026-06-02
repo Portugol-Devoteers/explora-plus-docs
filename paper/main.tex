@@ -24,6 +24,9 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
+% Posicionamento absoluto (brasao da capa)
+\usepackage{tikz}
+
 % Links e referencias
 \usepackage[hidelinks]{hyperref}
 \usepackage[
@@ -58,21 +61,23 @@
 \begin{titlepage}
 \newgeometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
 
-% Brasao no canto superior esquerdo
-\noindent
-\begin{minipage}[t]{0.18\textwidth}
-  \includegraphics[height=2.8cm]{figuras/brasao-unisantos.png}
-\end{minipage}%
-\begin{minipage}[t]{0.82\textwidth}
-  \centering
-  \vspace{0.3cm}
-  {\large\bfseries UNIVERSIDADE CAT\'OLICA DE SANTOS}\\[0.25cm]
+% Brasao em posicao absoluta (nao influencia o layout do texto)
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north west, xshift=2.5cm, yshift=-2cm]
+    at (current page.north west)
+    {\includegraphics[height=2.8cm]{figuras/brasao-unisantos.png}};
+\end{tikzpicture}
+
+\vspace*{1.2cm}
+
+% Todas as 4 linhas centralizadas no mesmo eixo
+\begin{center}
+  {\large\bfseries UNIVERSIDADE CAT\'OLICA DE SANTOS}\\[0.3cm]
   {\large Ci\^encia da Computa\c{c}\~ao}
-\end{minipage}
+\end{center}
 
 \vfill
 
-% Titulo centralizado
 \begin{center}
   {\fontsize{28}{34}\selectfont\bfseries Explora+}\\[0.8cm]
   {\large\bfseries Entrega de Prot\'otipo}
