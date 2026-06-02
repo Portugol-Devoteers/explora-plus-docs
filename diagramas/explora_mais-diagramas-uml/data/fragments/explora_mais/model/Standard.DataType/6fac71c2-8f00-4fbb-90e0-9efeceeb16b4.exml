@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Data Type" version="4">
+  <OBJECT>
+    <ID name="Data Type" mc="Standard.DataType" uid="6fac71c2-8f00-4fbb-90e0-9efeceeb16b4"/>
+    <PID name="Route" mc="Standard.Class" uid="52b00b72-dbd2-45c5-a6a1-2e4efe4e4f36"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">true</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Data Type]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,100 @@
+classDiagram
+    class User {
+        +Long id
+        +String username
+        +String email
+        +String passwordHash
+        +DateTime dateJoined
+        +authenticate(password) bool
+    }
+
+    class PlaceCategory {
+        +Long id
+        +String slug
+        +String name
+        +String iconName
+        +bool isActive
+    }
+
+    class Place {
+        +Long id
+        +String slug
+        +String name
+        +String sourceRef
+        +String osmType
+        +Long osmId
+        +String wikidataId
+        +String wikipediaTitle
+        +Point location
+        +String address
+        +String summary
+        +String openingHours
+        +String website
+        +String sourceUrl
+        +String detailStatus
+        +DateTime detailsFetchedAt
+        +bool isActive
+        +primaryImageUrl() String
+        +distanceTo(point) float
+    }
+
+    class PlaceImage {
+        +Long id
+        +String url
+        +int order
+        +String caption
+    }
+
+    class UserPlaceState {
+        +Long id
+        +bool isVisited
+        +DateTime visitedAt
+        +DateTime firstSeenAt
+        +DateTime lastSeenAt
+        +int seenCount
+        +markVisited() void
+        +markUnvisited() void
+    }
+
+    class RouteSearchCache {
+        +Long id
+        +String cacheKey
+        +String originQuery
+        +String destinationQuery
+        +dict routePayload
+        +dict mapPayload
+        +int hitCount
+        +DateTime createdAt
+        +bumpHit() void
+    }
+
+    class TourRoute {
+        +Long id
+        +String originLabel
+        +String destinationLabel
+        +Point originLocation
+        +Point destinationLocation
+        +String mode
+        +int distanceM
+        +int durationS
+        +LineString routeGeometry
+        +DateTime createdAt
+    }
+
+    class TourRouteStop {
+        +Long id
+        +int displayOrder
+        +int waypointOrder
+        +String state
+        +float distanceFromRouteM
+    }
+
+    User "1" --> "0..*" TourRoute : cria
+    User "1" --> "0..*" UserPlaceState : possui
+    PlaceCategory "1" --> "0..*" Place : categoriza
+    Place "1" *-- "0..*" PlaceImage : tem
+    Place "1" --> "0..*" UserPlaceState : rastreada_em
+    Place "1" --> "0..*" TourRouteStop : aparece_em
+    RouteSearchCache "1" --> "0..*" TourRoute : origina
+    TourRoute "1" *-- "0..*" TourRouteStop : contem
+    TourRoute "0..1" --> "0..*" UserPlaceState : ultima_rota_vista

@@ -1,0 +1,116 @@
+erDiagram
+    USER ||--o{ TOUR_ROUTE : cria
+    USER ||--o{ USER_PLACE_STATE : possui
+
+    PLACE_CATEGORY ||--o{ PLACE : categoriza
+
+    PLACE ||--o{ PLACE_IMAGE : tem
+    PLACE ||--o{ USER_PLACE_STATE : rastreada_em
+    PLACE ||--o{ TOUR_ROUTE_STOP : aparece_em
+
+    ROUTE_SEARCH_CACHE ||--o{ TOUR_ROUTE : origina
+
+    TOUR_ROUTE ||--o{ TOUR_ROUTE_STOP : contem
+    TOUR_ROUTE }o--o{ USER_PLACE_STATE : ultima_rota_vista
+
+    USER {
+        bigint id PK
+        string username UK
+        string email UK
+        string password_hash
+        datetime date_joined
+    }
+
+    PLACE_CATEGORY {
+        bigint id PK
+        string slug UK "culture | park | food"
+        string name
+        string icon_name
+        bool is_active
+    }
+
+    PLACE {
+        bigint id PK
+        string slug UK
+        bigint category_id FK
+        string name
+        string source_ref UK "stop_id publico"
+        string osm_type "node | way | relation"
+        bigint osm_id
+        string wikidata_id
+        string wikipedia_title
+        point location "PostGIS Point (lng,lat)"
+        string address
+        text summary
+        string opening_hours
+        string website
+        string source_url
+        string detail_status "pending|complete|unavailable|error"
+        datetime details_fetched_at
+        bool is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    PLACE_IMAGE {
+        bigint id PK
+        bigint place_id FK
+        string url
+        int order
+        string caption
+    }
+
+    USER_PLACE_STATE {
+        bigint id PK
+        bigint user_id FK
+        bigint place_id FK
+        bool is_visited
+        datetime visited_at
+        datetime first_seen_at
+        datetime last_seen_at
+        int seen_count
+        bigint last_seen_route_id FK "nullable"
+    }
+
+    ROUTE_SEARCH_CACHE {
+        bigint id PK
+        string cache_key UK
+        json canonical_payload
+        string origin_query
+        string destination_query
+        json route_payload
+        json map_payload
+        int hit_count
+        datetime created_at
+        datetime updated_at
+    }
+
+    TOUR_ROUTE {
+        bigint id PK
+        bigint user_id FK
+        bigint search_cache_id FK
+        string origin_label
+        string destination_label
+        point origin_location
+        point destination_location
+        string mode "tour | direct_fallback"
+        int distance_m
+        int duration_s
+        int direct_distance_m
+        int direct_duration_s
+        linestring route_geometry
+        linestring direct_route_geometry
+        datetime created_at
+        datetime updated_at
+    }
+
+    TOUR_ROUTE_STOP {
+        bigint id PK
+        bigint route_id FK
+        bigint place_id FK
+        int display_order
+        int waypoint_order "null se nao esta na rota"
+        string state "active | visited | excluded"
+        string source
+        float distance_from_route_m
+    }

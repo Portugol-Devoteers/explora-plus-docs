@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="explora_mais" version="4">
+  <OBJECT>
+    <ID name="explora_mais" mc="Standard.Project" uid="d8d815b5-a1ea-4d21-83f1-c5df58b71bec"/>
+    <ATTRIBUTES>
+      <ATT name="ProjectContext"></ATT>
+      <ATT name="ProjectDescr"></ATT>
+      <ATT name="Name"><![CDATA[explora_mais]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Model">
+        <COMPID name="explora_mais" mc="Standard.Package" uid="b3c7da48-4708-4563-83fd-221ecd936760"/>
+      </COMP>
+      <COMP relation="DiagramRoot">
+        <COMPID name="explora_mais" mc="Infrastructure.DiagramSet" uid="1ac47677-00ea-470f-9348-9ee7e6a7d804"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

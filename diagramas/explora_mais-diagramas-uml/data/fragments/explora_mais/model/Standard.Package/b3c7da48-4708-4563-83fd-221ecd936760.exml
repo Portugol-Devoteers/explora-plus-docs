@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="explora_mais" version="4">
+  <OBJECT>
+    <ID name="explora_mais" mc="Standard.Package" uid="b3c7da48-4708-4563-83fd-221ecd936760"/>
+    <PID name="explora_mais" mc="Standard.Project" uid="d8d815b5-a1ea-4d21-83f1-c5df58b71bec"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[explora_mais]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Category" mc="Standard.Class" uid="f3df224e-241e-4fea-bf45-fc4bae45d722"/>
+        <COMPID name="PlaceImage" mc="Standard.Class" uid="7290d128-845e-4550-a668-0820e76383ec"/>
+        <COMPID name="Place" mc="Standard.Class" uid="c2408035-41de-4c0c-a16d-03c73f19a10d"/>
+        <COMPID name="User" mc="Standard.Class" uid="02609019-afbf-42fa-9170-c278015cd239"/>
+        <COMPID name="Ticket" mc="Standard.Class" uid="3cf7a642-7711-445f-a478-66e3be460669"/>
+        <COMPID name="Route" mc="Standard.Class" uid="52b00b72-dbd2-45c5-a6a1-2e4efe4e4f36"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="explora_mais Class diagram" mc="Standard.ClassDiagram" uid="9c7e7ac8-cca2-4e32-9f61-4b1185f5eeaf"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

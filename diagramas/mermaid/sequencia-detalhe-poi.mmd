@@ -1,0 +1,38 @@
+sequenceDiagram
+    actor T as Turista
+    participant App as ExploreScreen
+    participant API as Backend API
+    participant DB as PostgreSQL
+    participant Nom as Nominatim
+    participant WD as Wikidata API
+    participant WP as Wikipedia API
+
+    T->>App: Toca em marcador do mapa ou item da lista
+    App->>API: GET /api/tour-routes/pois/{stop_id}/
+    API->>DB: SELECT Place WHERE source_ref = stop_id
+
+    alt Detalhes incompletos (details_fetched_at IS NULL ou todos campos vazios)
+        API->>Nom: Lookup por osm_type/osm_id com extratags=1
+        Nom-->>API: display_name, website, opening_hours, wikidata, wikipedia
+
+        alt wikidata_id disponivel
+            API->>WD: GET /w/api.php?action=wbgetentities&ids=Qxxx
+            WD-->>API: claims P18 (imagem), sitelinks (titulo Wikipedia)
+        end
+
+        alt wikipedia_title ainda nao encontrado
+            API->>WP: GET /w/api.php?action=query&list=search&srsearch={nome}
+            WP-->>API: Primeiro resultado da busca por nome (pt, depois en)
+        end
+
+        alt wikipedia_title disponivel
+            API->>WP: GET /api/rest_v1/page/summary/{title}
+            WP-->>API: extract (resumo), thumbnail/originalimage, content_urls
+        end
+
+        API->>DB: UPDATE Place (address, summary, website, opening_hours, source_url, wikipedia_title, detail_status)
+        API->>DB: INSERT PlaceImage (url da imagem encontrada)
+    end
+
+    API-->>App: {stop_id, name, category, address, summary, image_url, opening_hours, website, source_url}
+    App-->>T: Exibe modal TourPoiDetailModal com detalhes enriquecidos

@@ -1,0 +1,19 @@
+flowchart LR
+    Visitante((Visitante))
+    Turista((Turista))
+
+    Turista -.->|estende| Visitante
+
+    Visitante --> UC1[Visualizar mapa com rota e POIs]
+    Visitante --> UC2[Filtrar POIs por categoria\nCultura / Parques / Comida]
+    Visitante --> UC3[Criar conta]
+    Visitante --> UC4[Fazer login]
+
+    Turista --> UC5[Gerar rota turistica\norigem e destino com POIs]
+    Turista --> UC6[Abrir detalhe de POI\nimagem, resumo, horarios, website]
+    Turista --> UC7[Marcar POI como visitado]
+    Turista --> UC8[Desmarcar POI como visitado]
+    Turista --> UC9[Excluir POI da rota atual]
+    Turista --> UC10[Ver biblioteca pessoal de lugares]
+    Turista --> UC11[Ver perfil basico]
+    Turista --> UC12[Sair da conta]
