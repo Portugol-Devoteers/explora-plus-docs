@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Explora+ - Fluxograma do Projeto</title>
+  <style>
+    :root {
+      --bg: #f5f1e8;
+      --paper: #fffdf8;
+      --ink: #1f2933;
+      --muted: #52606d;
+      --line: #d9cbb7;
+      --accent: #cc5a2e;
+      --accent-soft: #ffe6d8;
+      --accent-2: #246a73;
+      --accent-3: #3f7d20;
+      --shadow: 0 12px 30px rgba(31, 41, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, #fff7ef 0, transparent 28%),
+        radial-gradient(circle at top right, #eef7f6 0, transparent 26%),
+        var(--bg);
+    }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #fff7ef, #fffdf8);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 900px;
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .legend-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .legend-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .legend-card span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 28px;
+    }
+
+    .section p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      min-height: 180px;
+    }
+
+    .card .tag {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .frontend { background: var(--accent); }
+    .backend { background: var(--accent-2); }
+    .providers { background: var(--accent-3); }
+    .data { background: #7c4dff; }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .pipeline {
+      display: grid;
+      gap: 16px;
+    }
+
+    .step {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 22px 20px 72px;
+      box-shadow: var(--shadow);
+    }
+
+    .step::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 20px;
+      top: 18px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    .step h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .step p,
+    .step ul {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .step ul {
+      margin-top: 8px;
+      padding-left: 18px;
+    }
+
+    .diagram {
+      overflow-x: auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .diagram-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 1040px;
+      margin-bottom: 14px;
+    }
+
+    .diagram-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .box {
+      flex: 1 1 0;
+      min-height: 118px;
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffdf8, #fff7ef);
+    }
+
+    .box h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .box p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .arrow {
+      font-size: 26px;
+      color: var(--accent);
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+
+    .notes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .note {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .note h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .note ul {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    @media (max-width: 980px) {
+      .flow-grid,
+      .notes {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <span class="eyebrow">Explora+ • visão geral</span>
+      <h1>Fluxograma completo do projeto</h1>
+      <p>
+        Este documento resume como o projeto está organizado hoje, como os dados
+        circulam entre frontend, backend, banco e provedores externos, e onde a
+        nova API de rota turística entra na arquitetura. A ideia é servir como
+        mapa mental antes da próxima fase de refatoração e integração.
+      </p>
+
+      <div class="legend">
+        <div class="legend-card">
+          <strong>Frontend</strong>
+          <span>Expo + React Native Web. Renderiza login, lugares, mapas e rotas.</span>
+        </div>
+        <div class="legend-card">
+          <strong>Backend</strong>
+          <span>Django + DRF. Expõe auth, catálogo de lugares, tickets, rotas e tour routes.</span>
+        </div>
+        <div class="legend-card">
+          <strong>Banco</strong>
+          <span>PostgreSQL + PostGIS. Sustenta places, auth e domínio persistido do app.</span>
+        </div>
+        <div class="legend-card">
+          <strong>Provedores externos</strong>
+          <span>Nominatim, OSRM e Overpass alimentam a API de rota turística sem banco.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>1. Repositórios e responsabilidades</h2>
+      <p>
+        O projeto está separado em três repositórios. Isso ajuda a dividir bem a
+        interface, a API e a documentação/modelagem.
+      </p>
+      <div class="flow-grid">
+        <article class="card">
+          <span class="tag frontend">Frontend</span>
+          <h3>explora-plus-frontend</h3>
+          <ul>
+            <li>App Expo / React Native com suporte web.</li>
+            <li>Telas de login, cadastro, explorar, detalhes, perfil, tickets e rota.</li>
+            <li>Componente de mapa baseado em Leaflet via WebView/iframe.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="tag backend">Backend</span>
+          <h3>explora-plus-backend</h3>
+          <ul>
+            <li>Django 5 + DRF + JWT + CORS.</li>
+            <li>Apps: <code>accounts</code>, <code>places</code>, <code>routes</code>, <code>tickets</code>, <code>tour_routes</code>.</li>
+            <li><code>places</code> e auth estão mais prontos; <code>routes</code>/<code>tickets</code> ainda estão incompletos.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="tag data">Dados</span>
+          <h3>Postgres + PostGIS</h3>
+          <ul>
+            <li>Persistência do catálogo de lugares e autenticação.</li>
+            <li>Geo dados do app principal.</li>
+            <li>Executa em container dedicado.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="tag providers">Docs</span>
+          <h3>explora-plus-docs</h3>
+          <ul>
+            <li>Modelagem, setup e artefatos de arquitetura.</li>
+            <li>Este HTML serve como visão operacional complementar.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>2. Fluxo macro do sistema</h2>
+      <p>
+        Este é o caminho principal que o usuário percorre hoje, do acesso à interface
+        até o consumo de dados do backend e da API de rota turística.
+      </p>
+      <div class="diagram">
+        <div class="diagram-row">
+          <div class="box">
+            <h4>Usuário</h4>
+            <p>Abre o app web/mobile, navega entre login, cadastro, explorar lugares e rota.</p>
+          </div>
+          <div class="arrow">→</div>
+          <div class="box">
+            <h4>Frontend Expo</h4>
+            <p>Chama a API do Django, renderiza listas, detalhes, mapa base e interações.</p>
+          </div>
+          <div class="arrow">→</div>
+          <div class="box">
+            <h4>Django + DRF</h4>
+            <p>Recebe requests, autentica quando necessário e orquestra respostas do domínio.</p>
+          </div>
+          <div class="arrow">→</div>
+          <div class="box">
+            <h4>Banco ou provedores</h4>
+            <p>Busca dados persistidos do app ou dados geográficos temporários externos.</p>
+          </div>
+        </div>
+        <div class="diagram-row">
+          <div class="box">
+            <h4>Resposta</h4>
+            <p>JSON padronizado volta para o frontend com estado de auth, places ou rota turística.</p>
+          </div>
+          <div class="arrow">←</div>
+          <div class="box">
+            <h4>Mapa</h4>
+            <p>O frontend desenha polyline e marcadores no Leaflet em cima do OpenStreetMap.</p>
+          </div>
+          <div class="arrow">←</div>
+          <div class="box">
+            <h4>UI final</h4>
+            <p>Usuário enxerga cards, detalhe do lugar, histórico e futura rota inteligente.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3. Fluxo da API principal do app</h2>
+      <p>
+        Esta é a parte mais tradicional do sistema, com persistência em banco e
+        autenticação JWT.
+      </p>
+      <div class="pipeline">
+        <article class="step" data-step="1">
+          <h3>Autenticação</h3>
+          <p>
+            O frontend envia cadastro para <code>/api/auth/register/</code> ou login
+            para <code>/api/auth/login/</code>. O backend cria o usuário e devolve
+            tokens JWT quando o fluxo dá certo.
+          </p>
+        </article>
+        <article class="step" data-step="2">
+          <h3>Catálogo de lugares</h3>
+          <p>
+            A tela de explorar consome <code>/api/places/</code> e a tela de detalhe
+            consome <code>/api/places/&lt;slug&gt;/</code>. Esses dados vêm do banco e
+            já estão estruturados para o frontend.
+          </p>
+        </article>
+        <article class="step" data-step="3">
+          <h3>Rotas e tickets do app principal</h3>
+          <p>
+            A arquitetura já reserva <code>/api/routes/</code> e <code>/api/tickets/</code>,
+            mas hoje esses endpoints ainda são placeholders. Eles existem para o desenho
+            do domínio, mas ainda não entregam a experiência final.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>4. Fluxo detalhado da API de rota turística</h2>
+      <p>
+        A API <code>POST /api/tour-routes/</code> é o coração novo do projeto. Ela não
+        usa banco e nem autenticação. Ela resolve origem e destino, calcula uma rota
+        principal e procura lugares interessantes próximos do caminho.
+      </p>
+      <div class="pipeline">
+        <article class="step" data-step="1">
+          <h3>Entrada do request</h3>
+          <p>
+            O cliente manda <code>origin</code> e <code>destination</code>, cada um com
+            exatamente um entre <code>address</code> ou <code>location</code>.
+          </p>
+        </article>
+        <article class="step" data-step="2">
+          <h3>Validação e normalização</h3>
+          <p>
+            O serializer do Django valida o formato e o planner decide se precisa
+            geocodificar um texto ou se já pode seguir com coordenadas.
+          </p>
+        </article>
+        <article class="step" data-step="3">
+          <h3>Geocoding com Nominatim</h3>
+          <p>
+            Se vier endereço, o backend chama o Nominatim para transformar esse texto
+            em <code>lat/lng</code> e rótulo resolvido.
+          </p>
+        </article>
+        <article class="step" data-step="4">
+          <h3>Rota base com OSRM</h3>
+          <p>
+            Com origem e destino resolvidos, o backend chama o OSRM público e recebe
+            distância, duração e geometria completa da caminhada.
+          </p>
+        </article>
+        <article class="step" data-step="5">
+          <h3>Busca de POIs com Overpass</h3>
+          <p>
+            O sistema abre um corredor ao redor da rota e busca cultura, parque e
+            comida num raio máximo de 250 metros da linha principal.
+          </p>
+          <ul>
+            <li>Cultura: museu, galeria, atração, historic, theatre, arts_centre.</li>
+            <li>Parque: park, garden, viewpoint.</li>
+            <li>Comida: restaurant, cafe.</li>
+          </ul>
+        </article>
+        <article class="step" data-step="6">
+          <h3>Seleção inteligente dos POIs</h3>
+          <p>
+            Os candidatos são deduplicados por nome + proximidade, depois distribuídos
+            ao longo da rota com alvo de 100 metros entre oportunidades de parada.
+          </p>
+        </article>
+        <article class="step" data-step="7">
+          <h3>Montagem da resposta</h3>
+          <p>
+            O backend devolve dois blocos:
+          </p>
+          <ul>
+            <li><code>route</code>: origem, destino, distância, duração, polyline e <code>places_to_pass</code>.</li>
+            <li><code>map</code>: GeoJSON <code>FeatureCollection</code> com linha e marcadores.</li>
+          </ul>
+        </article>
+        <article class="step" data-step="8">
+          <h3>Renderização no frontend</h3>
+          <p>
+            A ideia final é o frontend usar esses dados para desenhar a rota real no
+            OpenStreetMap e apresentar os POIs como lista, pinos e pontos de parada.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>5. Onde o projeto está desalinhado hoje</h2>
+      <div class="notes">
+        <article class="note">
+          <h3>Frontend x backend</h3>
+          <ul>
+            <li>A tela de rota do frontend ainda usa uma linha reta mockada entre origem e destino.</li>
+            <li>O frontend continua apontando para <code>/api/routes/</code>, enquanto a API pronta está em <code>/api/tour-routes/</code>.</li>
+            <li>Os tipos de marcador do frontend ainda não batem com os <code>kind</code>s do GeoJSON novo.</li>
+          </ul>
+        </article>
+        <article class="note">
+          <h3>Estrutura do Django</h3>
+          <ul>
+            <li><code>tour_routes</code> está bem isolado, mas o app principal ainda tem <code>routes</code> placeholder.</li>
+            <li>Na próxima refatoração, vocês provavelmente vão decidir se mantêm <code>tour_routes</code> separado ou se consolidam responsabilidades.</li>
+            <li>O projeto também depende bastante do stack GIS no Docker, o que afeta a experiência local.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>6. Próximos passos naturais</h2>
+      <div class="notes">
+        <article class="note">
+          <h3>Integração imediata</h3>
+          <ul>
+            <li>Fazer o frontend consumir <code>POST /api/tour-routes/</code>.</li>
+            <li>Converter o GeoJSON em polyline e marcadores no mapa atual.</li>
+            <li>Exibir <code>places_to_pass</code> como cards/lista clicável.</li>
+          </ul>
+        </article>
+        <article class="note">
+          <h3>Refatoração estrutural</h3>
+          <ul>
+            <li>Reorganizar apps e responsabilidades do Django.</li>
+            <li>Definir a fronteira entre rota persistida do app e rota turística calculada em tempo real.</li>
+            <li>Alinhar setup local para facilitar desenvolvimento e demonstração.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

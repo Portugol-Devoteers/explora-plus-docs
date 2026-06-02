@@ -1,40 +1,47 @@
 # Guia de Setup Detalhado — Explora+
 
-Este documento detalha o ambiente de desenvolvimento, as decisões de arquitetura e o fluxo de trabalho para os integrantes do grupo.
+Este documento detalha o ambiente de desenvolvimento, as decisoes de arquitetura e o fluxo de trabalho para os integrantes do grupo.
 
 ---
 
 ## Por que Docker?
 
-Docker garante que o ambiente de todos os integrantes seja idêntico, independente do sistema operacional (Windows, Mac, Linux). Isso elimina o clássico problema de "na minha máquina funciona".
+Docker garante que o ambiente de todos os integrantes seja identico, independente do sistema operacional (Windows, Mac, Linux). Isso elimina o classico problema de "na minha maquina funciona".
 
-Cada serviço roda em seu próprio container isolado:
+Cada servico roda em seu proprio container isolado:
 
-| Container  | O que roda                              | Porta local |
-|------------|-----------------------------------------|-------------|
-| `db`       | PostgreSQL 16 + PostGIS 3.4            | 5432        |
-| `backend`  | Django 5.x + DRF                       | 8000        |
-| `frontend` | Expo / React Native                    | 8081, 19000–19002 |
+| Container  | O que roda                              | Porta host | Porta interna |
+|------------|-----------------------------------------|------------|---------------|
+| `db`       | PostgreSQL 16 + PostGIS 3.4            | 5433       | 5432          |
+| `backend`  | Django 5.1 + DRF + Gunicorn            | 8080       | 8000          |
+| `frontend` | Expo / React Native Web                | 8082       | 8081          |
 
 ---
 
-## Variáveis de ambiente
+## Variaveis de ambiente
 
-Todas as configurações sensíveis ficam no arquivo `.env` (nunca commitado no Git). O `.env.example` serve de template.
+Todas as configuracoes sensiveis ficam no arquivo `.env` (nunca commitado no Git). O `.env.example` serve de template.
 
-### Variáveis disponíveis
+### Backend (`explora-plus-backend/.env`)
 
-| Variável               | Descrição                                 | Padrão sugerido         |
+| Variavel               | Descricao                                 | Padrao sugerido         |
 |------------------------|-------------------------------------------|-------------------------|
 | `DB_NAME`              | Nome do banco PostgreSQL                  | `explora_plus`          |
-| `DB_USER`              | Usuário do banco                          | `explora_user`          |
+| `DB_USER`              | Usuario do banco                          | `explora_user`          |
 | `DB_PASSWORD`          | Senha do banco                            | `explora_pass`          |
 | `DB_HOST`              | Host do banco (dentro do Docker: `db`)    | `db`                    |
-| `DB_PORT`              | Porta do banco                            | `5432`                  |
-| `DJANGO_SECRET_KEY`    | Chave secreta do Django (mude em prod!)   | _(gere uma aleatória)_  |
+| `DB_PORT`              | Porta do banco (interna ao Docker)        | `5432`                  |
+| `DJANGO_SECRET_KEY`    | Chave secreta do Django (mude em prod!)   | _(gere uma aleatoria)_  |
 | `DJANGO_DEBUG`         | Ativar modo debug                         | `True`                  |
-| `DJANGO_ALLOWED_HOSTS` | Hosts permitidos                          | `localhost,127.0.0.1`   |
-| `EXPO_PUBLIC_API_URL`  | URL do backend acessível pelo app         | `http://localhost:8000` |
+| `DJANGO_ALLOWED_HOSTS` | Hosts permitidos                          | `localhost,127.0.0.1,backend` |
+
+### Frontend (`explora-plus-frontend/.env`)
+
+| Variavel               | Descricao                                 | Valor recomendado       |
+|------------------------|-------------------------------------------|-------------------------|
+| `EXPO_PUBLIC_API_URL`  | URL do backend acessivel pelo app         | `http://localhost:8080` |
+
+> **Atencao:** o `.env.example` historico pode estar com porta `8000`. Use `8080` no setup atual.
 
 ### Como gerar uma SECRET_KEY segura
 
@@ -44,34 +51,58 @@ python3 -c "import secrets; print(secrets.token_urlsafe(50))"
 
 ---
 
+## Subindo o projeto
+
+### Backend
+
+```bash
+cd explora-plus-backend
+docker compose up --build -d
+docker compose exec backend python manage.py migrate
+docker compose exec backend python manage.py seed_demo --reset
+```
+
+API disponivel em: `http://localhost:8080/api/health/`
+
+### Frontend
+
+```bash
+cd explora-plus-frontend
+npm install
+npm run web
+# ou via Docker:
+docker compose up --build -d
+# Frontend em http://localhost:8082
+```
+
+---
+
 ## Fluxo de desenvolvimento
 
 ### Hot reload
 
-Os volumes do Docker Compose montam o código do host dentro do container:
+Os volumes do Docker Compose montam o codigo do host dentro do container:
 
-- **Backend:** qualquer alteração em `./backend/` é refletida instantaneamente (o Django detecta e reinicia automaticamente com `runserver`).
-- **Frontend:** qualquer alteração em `./frontend/` é refletida pelo Fast Refresh do Expo.
+- **Backend:** qualquer alteracao em `./` e refletida instantaneamente (Django detecta e reinicia com runserver).
+- **Frontend:** qualquer alteracao e refletida pelo Fast Refresh do Expo.
 
-Você **não** precisa reconstruir a imagem a cada alteração de código. O `--build` só é necessário quando você muda o `Dockerfile`, `requirements.txt` ou `package.json`.
+O `--build` so e necessario quando voce muda o `Dockerfile`, `requirements.txt` ou `package.json`.
 
-### Adicionando dependências Python
+### Adicionando dependencias Python
 
 ```bash
-# 1. Adicione ao backend/requirements.txt com versão fixada
-echo "nova-lib==1.2.3" >> backend/requirements.txt
+# 1. Adicione ao requirements.txt com versao fixada
+echo "nova-lib==1.2.3" >> requirements.txt
 
 # 2. Reconstrua a imagem do backend
 docker compose up --build backend
 ```
 
-### Adicionando dependências Node
+### Adicionando dependencias Node
 
 ```bash
-# 1. Instale via npm (será salvo no package.json)
 docker compose exec frontend npm install nome-do-pacote
-
-# 2. Ou reconstrua se preferir
+# ou reconstrua:
 docker compose up --build frontend
 ```
 
@@ -81,64 +112,149 @@ docker compose up --build frontend
 docker compose exec backend python manage.py startapp nome_do_app
 ```
 
-Lembre de adicionar `"nome_do_app"` em `INSTALLED_APPS` no `settings.py`.
+Lembre de adicionar `"nome_do_app"` em `INSTALLED_APPS` no `settings/base.py`.
 
-### Rodando migrations após criar models
+### Rodando migrations
 
 ```bash
-# Criar arquivo de migration
 docker compose exec backend python manage.py makemigrations
-
-# Aplicar ao banco
 docker compose exec backend python manage.py migrate
+# Verificar que nao ha migrations pendentes:
+docker compose exec backend python manage.py makemigrations --check --dry-run
 ```
 
 ---
 
-## Acessando serviços
+## Acessando servicos
 
 ### Admin do Django
 
-1. Crie um superusuário: `docker compose exec backend python manage.py createsuperuser`
-2. Acesse: `http://localhost:8000/admin/`
+```
+http://localhost:8080/admin/
+```
+
+Criar superusuario:
+```bash
+docker compose exec backend python manage.py createsuperuser
+```
 
 ### Health Check da API
 
 ```bash
-curl -s http://localhost:8000/api/health/ | python3 -m json.tool
+curl -s http://localhost:8080/api/health/ | python3 -m json.tool
+```
+
+Resposta esperada:
+```json
+{"status": "ok", "db": "ok", "postgis": "..."}
 ```
 
 ### Banco de dados diretamente
 
 ```bash
-# Via psql
 docker compose exec db psql -U explora_user -d explora_plus
-
-# Comandos úteis dentro do psql:
-# \dt         — listar tabelas
-# \l          — listar bancos
-# \q          — sair
+# \dt  - listar tabelas
+# \l   - listar bancos
+# \q   - sair
 ```
+
+Porta externa do PostgreSQL: `localhost:5433`
+
+---
+
+## Seeds e dados de demonstracao
+
+```bash
+# Popula categorias canonicas (culture, park, food) e lugares curados de Santos
+docker compose exec backend python manage.py seed_demo --reset
+```
+
+O `--reset` apaga `PlaceImage` e `Place` antes de repopular.
+
+---
+
+## Testes
+
+### Suite principal (tour_routes)
+
+```bash
+docker compose exec backend python manage.py test tour_routes.tests \
+  --settings=explora_plus.settings.test \
+  --verbosity 2 --noinput
+```
+
+### Verificacao de tipos (frontend)
+
+```bash
+npm exec tsc -- --noEmit
+```
+
+---
+
+## Estrutura do backend Django
+
+```
+explora-plus-backend/
+|-- accounts/              # registro, login, refresh, /api/me/
+|-- core/                  # health check e constantes de dominio
+|-- places/                # dominio canonico de lugares e estados do usuario
+|   |-- management/commands/
+|   |   `-- seed_demo.py   # dados curados de demonstracao
+|   `-- catalog.py         # upsert de lugares a partir de payloads
+|-- tickets/               # endpoint isolado de ingressos mockados
+|-- tour_routes/           # planner, cache, rota atual, biblioteca do usuario
+|   |-- services/          # geocoding, routing, Overpass, Wikidata, Wikipedia, map builder
+|   `-- tests/             # testes do fluxo de rotas
+|-- routes/                # legado, fora do caminho ativo
+|-- explora_plus/          # configuracao Django e roteamento raiz
+|   `-- settings/
+|       |-- base.py        # configuracoes compartilhadas
+|       |-- docker.py      # configuracoes especificas do Docker (default do manage.py)
+|       `-- test.py        # configuracoes para suite de testes
+|-- docker-compose.yml
+|-- Dockerfile
+|-- entrypoint.sh
+|-- manage.py
+`-- requirements.txt
+```
+
+### Endpoints disponiveis
+
+| Metodo | Rota | Auth | Papel |
+|--------|------|------|-------|
+| GET    | `/api/health/` | Nao | Verifica DB e PostGIS |
+| POST   | `/api/auth/register/` | Nao | Cria usuario |
+| POST   | `/api/auth/login/` | Nao | Login JWT |
+| POST   | `/api/auth/refresh/` | Nao | Renova access token |
+| GET    | `/api/me/` | Sim | Usuario atual |
+| GET    | `/api/places/` | Nao | Lista lugares ativos |
+| GET    | `/api/places/<slug>/` | Nao | Detalhe de lugar |
+| POST   | `/api/tour-routes/` | Opcional | Calcula rota; salva se autenticado |
+| GET    | `/api/tour-routes/current/` | Sim | Rota mais recente do usuario |
+| GET    | `/api/tour-routes/places/` | Sim | Biblioteca pessoal de lugares |
+| GET    | `/api/tour-routes/pois/<stop_id>/` | Nao | Detalhe enriquecido de POI |
+| PATCH  | `/api/tour-routes/places/<stop_id>/visited/` | Sim | Marca/desmarca visitado |
+| DELETE | `/api/tour-routes/saved/<route_id>/stops/<stop_id>/` | Sim | Exclui stop da rota |
+| PATCH  | `/api/tour-routes/saved/<route_id>/stops/<stop_id>/state/` | Sim | Muda estado publico do stop |
+| GET    | `/admin/` | Sim | Interface administrativa Django |
 
 ---
 
 ## Expo Go no celular
 
-### Opção 1: Rede local (recomendado para desenvolvimento)
+### Opcao 1: Rede local (recomendado)
 
-O Expo detecta automaticamente o IP da máquina. Para que o celular acesse o backend:
-
-1. Descubra o IP da sua máquina: `ip a` (Linux) / `ifconfig` (Mac) / `ipconfig` (Windows)
-2. Edite `frontend/.env`:
+1. Descubra o IP da sua maquina: `ipconfig` (Windows) / `ifconfig` (Mac/Linux)
+2. Edite `explora-plus-frontend/.env`:
    ```
-   EXPO_PUBLIC_API_URL=http://SEU_IP:8000
+   EXPO_PUBLIC_API_URL=http://SEU_IP:8080
    ```
 3. Reinicie: `docker compose restart frontend`
 4. Leia o QR code com o Expo Go
 
-### Opção 2: Túnel (quando a rede local bloqueia)
+### Opcao 2: Tunel (quando a rede local bloqueia)
 
-Se estiver em uma rede que bloqueia conexões diretas (ex: rede universitária), use o modo túnel do Expo:
+Se estiver em uma rede que bloqueia conexoes diretas (ex: rede universitaria):
 
 1. Edite o `CMD` no `frontend/Dockerfile`:
    ```dockerfile
@@ -146,41 +262,12 @@ Se estiver em uma rede que bloqueia conexões diretas (ex: rede universitária),
    ```
 2. Reconstrua: `docker compose up --build frontend`
 
-O modo túnel usa os servidores do Expo como relay, então funciona em qualquer rede, mas é um pouco mais lento.
-
 ---
 
-## Estrutura do backend Django
+## Convencoes do projeto
 
-```
-backend/
-├── explora_plus/         # Pacote do projeto Django
-│   ├── settings.py       # Configurações (lê do .env via python-decouple)
-│   ├── urls.py           # Roteamento raiz
-│   ├── wsgi.py           # WSGI para deploy
-│   └── asgi.py           # ASGI (futuro, para WebSockets)
-├── core/                 # App inicial
-│   ├── views.py          # Health check endpoint
-│   └── urls.py           # Rotas do app core
-├── manage.py
-├── requirements.txt
-├── Dockerfile
-└── entrypoint.sh         # Script de inicialização do container
-```
-
-### Endpoints disponíveis
-
-| Método | Rota          | Descrição                        | Auth |
-|--------|---------------|----------------------------------|------|
-| GET    | /api/health/  | Verifica DB e PostGIS            | Não  |
-| GET    | /admin/       | Interface administrativa Django  | Sim  |
-
----
-
-## Convenções do projeto
-
-- **Python:** PEP 8, 4 espaços de indentação
-- **TypeScript/JS:** 2 espaços de indentação
-- **Commits:** mensagens em inglês no imperativo: `add`, `fix`, `update`, `remove`
+- **Python:** PEP 8, 4 espacos de indentacao
+- **TypeScript/JS:** 2 espacos de indentacao
+- **Commits:** mensagens em ingles no imperativo: `add`, `fix`, `update`, `remove`
 - **Branches:** `feature/<descricao>`, `fix/<descricao>`
-- **Nunca commite** arquivos `.env` — eles estão no `.gitignore`
+- **Nunca commite** arquivos `.env` -- eles estao no `.gitignore`

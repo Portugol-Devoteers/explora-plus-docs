@@ -1,0 +1,28 @@
+flowchart TB
+    subgraph Turista["Dispositivo do Turista"]
+        App["App Expo Web / React Native\nhttp://localhost:8082"]
+    end
+
+    subgraph DevMachine["Maquina de Desenvolvimento (Docker Compose)"]
+        subgraph DockerNet["Rede Docker Interna"]
+            BackendC["Container: backend\nDjango 5.1 + Gunicorn\nporta interna 8000\nporta host 8080"]
+            FrontendC["Container: frontend\nExpo Web\nporta interna 8081\nporta host 8082"]
+            DBC["Container: db\npostgis/postgis 16-3.4\nporta interna 5432\nporta host 5433"]
+            BackendC <--> DBC
+        end
+    end
+
+    subgraph Externos["Provedores Externos"]
+        Nominatim["Nominatim\nnominatim.openstreetmap.org"]
+        OSRM["OSRM\nrouter.project-osrm.org"]
+        Overpass["Overpass API\noverpass-api.de"]
+        Wikidata["Wikidata\nwww.wikidata.org"]
+        Wikipedia["Wikipedia\npt.wikipedia.org\nen.wikipedia.org"]
+    end
+
+    App -->|HTTPS / JSON porta 8080| BackendC
+    BackendC -->|geocoding| Nominatim
+    BackendC -->|roteamento| OSRM
+    BackendC -->|POIs OSM| Overpass
+    BackendC -->|imagem P18| Wikidata
+    BackendC -->|resumo e busca| Wikipedia

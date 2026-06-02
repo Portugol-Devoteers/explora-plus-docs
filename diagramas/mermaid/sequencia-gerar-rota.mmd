@@ -1,0 +1,39 @@
+sequenceDiagram
+    actor T as Turista
+    participant App as ExploreScreen
+    participant API as Backend API
+    participant Cache as RouteSearchCache
+    participant Nom as Nominatim
+    participant OSRM as OSRM
+    participant OVP as Overpass API
+    participant DB as PostgreSQL
+
+    T->>App: Preenche origem e destino, toca "Gerar Rota"
+    App->>API: POST /api/tour-routes/ {origin, destination}
+
+    API->>Cache: Busca por cache_key canonico
+    alt Cache valido encontrado
+        Cache-->>API: route_payload + map_payload
+        API->>DB: Upsert Place para cada POI do cache
+    else Cache miss ou expirado
+        API->>Nom: Geocodifica origem e destino
+        Nom-->>API: {lat, lng} para cada ponto
+        API->>OSRM: GET /route/v1/foot/{coords}
+        OSRM-->>API: polyline + distance_m + duration_s
+        API->>OVP: Interpola bbox da rota, busca POIs por tag
+        OVP-->>API: Lista de nos OSM (nome, coord, tags)
+        API->>DB: Upsert Place para cada POI encontrado
+        API->>Cache: INSERT RouteSearchCache com route_payload e map_payload
+    end
+
+    alt Usuario autenticado
+        API->>DB: INSERT TourRoute (user, cache, geometria)
+        API->>DB: INSERT TourRouteStop para cada POI (state=active)
+        API->>DB: INSERT/UPDATE UserPlaceState para cada POI
+        API-->>App: 200 {route, map, saved_route_id}
+    else Usuario anonimo
+        API-->>App: 200 {route, map} sem saved_route_id
+    end
+
+    App->>App: Renderiza polyline e marcadores no mapa Leaflet
+    App-->>T: Exibe rota com paradas, distancia e duracao

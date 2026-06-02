@@ -1,0 +1,36 @@
+flowchart TD
+    Start([Inicio]) --> OpenApp[Abrir app]
+    OpenApp --> AuthCheck{Sessao\nautenticada?}
+
+    AuthCheck -->|Sim| TryCurrentRoute[GET /api/tour-routes/current/]
+    TryCurrentRoute --> RoutFound{Rota salva\nencontrada?}
+    RoutFound -->|200 OK| ShowRoute[Exibe rota salva]
+    RoutFound -->|404| GenDefault[Gera rota padrao\nPOST /api/tour-routes/]
+
+    AuthCheck -->|Nao| GenAnon[Gera rota anonima\nPOST /api/tour-routes/]
+
+    ShowRoute --> RenderMap
+    GenDefault --> RenderMap
+    GenAnon --> RenderMap[Renderiza mapa Leaflet\n+ polyline + marcadores]
+
+    RenderMap --> Idle{Aguarda\ninteracao}
+
+    Idle -->|Filtro categoria| Filter[Atualiza visibilidade\ndos marcadores no mapa]
+    Filter --> Idle
+
+    Idle -->|Toca marcador\nou item da lista| OpenDetail[GET /api/tour-routes/pois/stop_id/]
+    OpenDetail --> Modal[Exibe TourPoiDetailModal\nimagem + resumo + botoes]
+
+    Modal -->|Marcar visitado| PatchVisited[PATCH .../state/\nbody: state=visited]
+    PatchVisited --> UpdateRoute[Atualiza rota e mapa\nstop vai para Ja visitados]
+    UpdateRoute --> CloseModal
+
+    Modal -->|Excluir da rota| DeleteStop[DELETE .../stops/stop_id/]
+    DeleteStop --> RebuildRoute[Reconstroi rota\nsem o stop]
+    RebuildRoute --> CloseModal
+
+    Modal -->|Fechar| CloseModal[Fecha modal]
+    CloseModal --> Idle
+
+    Idle -->|Recalcular rota| NewRoute[POST /api/tour-routes/\nnova origem e destino]
+    NewRoute --> RenderMap

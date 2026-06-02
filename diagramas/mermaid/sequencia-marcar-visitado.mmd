@@ -1,0 +1,26 @@
+sequenceDiagram
+    actor T as Turista
+    participant App as ExploreScreen
+    participant API as Backend API
+    participant DB as PostgreSQL
+    participant Planner as Route Planner
+
+    T->>App: Toca "Marcar como visitado" no modal do POI
+    App->>API: PATCH /api/tour-routes/saved/{route_id}/stops/{stop_id}/state/ {state: "visited"}
+
+    API->>DB: SELECT TourRoute WHERE id=route_id AND user=request.user
+    API->>DB: Verifica se stop_id esta na base_route_payload
+
+    API->>DB: UPDATE UserPlaceState SET is_visited=True, visited_at=now()
+    API->>DB: UPDATE TourRouteStop SET state="visited"
+
+    API->>Planner: Reconstroi rota excluindo stops visitados do trajeto ativo
+    Planner->>DB: SELECT stops WHERE state != "visited" AND state != "excluded"
+    Planner-->>API: Nova polyline + waypoints recalculados
+
+    API->>DB: UPDATE TourRoute (route_geometry, distance_m, duration_s)
+    API-->>App: 200 {route atualizada com novo trajeto}
+
+    App->>App: Move POI para secao "Ja visitados"
+    App->>App: Atualiza marcador no mapa para estado "visited"
+    App-->>T: Exibe rota atualizada sem o POI no trajeto ativo
