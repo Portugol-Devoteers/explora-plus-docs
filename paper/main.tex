@@ -133,7 +133,11 @@ O Explora+ oferece um planejador de rotas tur\'isticas que:
 
 \subsection{Stakeholder externo}
 
-O cliente externo do projeto \'e Felipe Pacheco Fernandes, CRO do Grupo Costa Norte de Comunica\c{c}\~ao, sediado na Baixada Santista/SP. O grupo atua como stakeholder, contribuindo com feedback sobre comunica\c{c}\~ao e facilitando contato com estabelecimentos comerciais e ag\^encias de turismo locais.
+O cliente externo do projeto \'e Felipe Pacheco Fernandes, ex-CRO do Grupo Costa Norte de Comunica\c{c}\~ao, sediado na Baixada Santista/SP. Ao longo do desenvolvimento, Felipe deixou o grupo em que estava inserido e passou a conduzir seu envolvimento com o projeto de forma independente, atuando como Product Owner externo \`a organiza\c{c}\~ao.
+
+Essa mudan\c{c}a teve impacto direto na vis\~ao do produto: desvinculado de uma empresa com atuação regional específica, o PO ampliou o escopo conceitual do Explora+ de um app pensado para integrar parceiros comerciais da Baixada Santista para uma \textbf{plataforma de prop\'osito geral}, capaz de atender turistas de qualquer cidade com perfil tur\'istico semelhante ao de Santos. O produto passou a ser concebido como um aplicativo independente, com potencial de lan\c{c}amento e monetiza\c{c}\~ao aut\^onoma, sem depend\^encia de parcerias institucionais espec\'ificas para operar.
+
+Esse reposicionamento est\'a alinhado com o car\'ater extensionista do projeto: a solu\c{c}\~ao desenvolvida aplica conhecimento acad\^emico para um problema real e transferível, com impacto potencial que ultrapassa o contexto local onde foi originada.
 
 % -----------------------------------------------------------
 \section{Desenvolvimento}
@@ -151,9 +155,9 @@ O time adotou metodologia \'agil com sprints semanais, organiza\c{c}\~ao de tare
 
 \subsection{Proposta inicial de arquitetura}
 
-No in\'icio do semestre, a arquitetura proposta previa integra\c{c}\~ao com APIs comerciais como Google Maps (geolocaliza\c{c}\~ao e roteamento), GeoAPIFy (backup de geocodifica\c{c}\~ao), Sympla e TicketMaster (eventos culturais), Uber e 99 (mobilidade urbana) e Quanto Tempo Falta (transporte p\'ublico). O modelo de dados inicial era centrado em uma entidade \texttt{Route} de destino \'unico (\emph{single-destination}).
+No in\'icio do semestre, a arquitetura proposta previa integra\c{c}\~ao com APIs comerciais como Google Maps (geolocaliza\c{c}\~ao e roteamento), GeoAPIFy (backup de geocodifica\c{c}\~ao), Sympla e TicketMaster (eventos culturais), Uber e 99 (mobilidade urbana) e Quanto Tempo Falta (transporte p\'ublico). O modelo de dados inicial era centrado em uma entidade \texttt{Route} de destino \'unico (\emph{single-destination}). Essa proposta foi elaborada em um contexto em que o PO atuava dentro do Grupo Costa Norte, o que sugeria a viabilidade de parcerias com estabelecimentos comerciais e ag\^encias de turismo locais como suporte \`a distribui\c{c}\~ao do produto.
 
-Durante o desenvolvimento, essa proposta foi substitu\'ida por uma arquitetura totalmente baseada em dados abertos, eliminando depend\^encias de APIs pagas e ampliando a cobertura de POIs. As justificativas para as mudan\c{c}as s\~ao detalhadas na Se\c{c}\~ao~\ref{sec:arch}.
+Com a mudan\c{c}a desse contexto -- e a consequente revis\~ao da vis\~ao do produto para uma plataforma independente -- a arquitetura foi revista para refletir uma abordagem mais aut\^onoma e escal\'avel, eliminando depend\^encias de APIs pagas e parceiros institucionais. As justificativas detalhadas est\~ao na Se\c{c}\~ao~\ref{sec:arch}.
 
 \subsection{Arquitetura implementada}
 \label{sec:arch}
@@ -327,7 +331,7 @@ Cache de rotas & Rota reutilizada para mesma origem/destino e mesmas prefer\^enc
 
 \subsubsection{Funcionalidades fora do escopo atual}
 
-As seguintes funcionalidades foram identificadas na proposta inicial, mas n\~ao foram implementadas neste ciclo por decis\~ao de escopo:
+As seguintes funcionalidades identificadas na proposta inicial aguardam a defini\c{c}\~ao do modelo de monetiza\c{c}\~ao e da estrat\'egia de distribui\c{c}\~ao do produto para serem incorporadas em ciclos futuros:
 
 \begin{itemize}
   \item Integra\c{c}\~ao com eventos culturais (Sympla, TicketMaster);
@@ -339,13 +343,34 @@ As seguintes funcionalidades foram identificadas na proposta inicial, mas n\~ao 
   \item Busca por voz.
 \end{itemize}
 
+\subsection{Refinamento de Escopo e Entrega do Prot\'otipo}
+
+Ao longo do semestre, o escopo do projeto foi revisado em alinhamento com o Product Owner. A principal decis\~ao foi concentrar os esfor\c{c}os desta entrega na \textbf{valida\c{c}\~ao da arquitetura e na demonstra\c{c}\~ao de escalabilidade como MVP}, postergando para ciclos futuros as integrações com plataformas comerciais e a defini\c{c}\~ao da estrat\'egia de distribui\c{c}\~ao. Essa decis\~ao foi respaldada por tr\^es fatores:
+
+\begin{itemize}
+  \item As integrações com Sympla, TicketMaster, Uber e 99 pressup\~oem uma estrat\'egia comercial definida -- seja por comiss\~ao de transa\c{c}\~oes, parceria de visibilidade ou plano premium. Como o modelo de monetiza\c{c}\~ao do produto ainda est\'a em elabora\c{c}\~ao, incorporar essas integrações neste ciclo seria prematuro e poderia criar depend\^encias incompat\'iveis com o modelo de neg\'ocio que vier a ser adotado;
+  \item A prioridade declarada pelo PO era validar a solidez da arquitetura central como funda\c{c}\~ao escal\'avel -- roteamento, enriquecimento progressivo de POIs e personaliza\c{c}\~ao de prefer\^encias -- antes de agregar camadas comerciais. Um MVP tecnicamente robusto demonstra que o produto pode suportar diferentes estrat\'egias de distribui\c{c}\~ao;
+  \item Com a atua\c{c}\~ao independente do PO e a reformula\c{c}\~ao da vis\~ao do produto para uma plataforma de prop\'osito geral, o foco desta entrega se concentrou em demonstrar que a arquitetura \'e transfer\'ivel e escal\'avel al\'em de Santos, deixando a estrat\'egia de monetiza\c{c}\~ao e distribui\c{c}\~ao para a pr\'oxima fase.
+\end{itemize}
+
+Na etapa de entrega do prot\'otipo, o aplicativo foi apresentado ao PO e aos demais interessados por meio de uma reuni\~ao via Google Meet, com compartilhamento de tela e demonstra\c{c}\~ao ao vivo dos fluxos principais do aplicativo (Figura~\ref{fig:reuniao}). O feedback colhido foi positivo: o PO aprovou a arquitetura adotada, reconhecendo a robustez do sistema de roteamento com dados abertos, a coer\^encia do modelo de dados e a funcionalidade do fluxo principal de uso. Os testes realizados durante a apresenta\c{c}\~ao demonstraram comportamento satisfat\'orio nos casos de uso principais, sem inconsist\^encias cr\'iticas identificadas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figuras/reuniao.png}
+  \caption{Reuni\~ao de entrega do prot\'otipo via Google Meet -- PO e equipe presentes, com demonstra\c{c}\~ao ao vivo do Explora+}
+  \label{fig:reuniao}
+\end{figure}
+
+Como perspectiva de evolu\c{c}\~ao, ficou registrada a necessidade de definir um \textbf{modelo de monetiza\c{c}\~ao} para o aplicativo, etapa que viabilizar\'a as integrações com plataformas de eventos, mobilidade e transporte p\'ublico previstas na proposta original. Possibilidades levantadas incluem parcerias com estabelecimentos comerciais para destaque patrocinado de POIs em rotas, planos premium com funcionalidades avan\c{c}adas e modelos de distribui\c{c}\~ao via ag\^encias de turismo. A defini\c{c}\~ao dessa estrat\'egia \'e o pr\'oximo passo natural para levar o Explora+ de prot\'otipo validado a produto lan\c{c}ado.
+
 % -----------------------------------------------------------
 \section{Conclus\~ao}
 % -----------------------------------------------------------
 
-O Explora+ entregou um MVP funcional e coerente que cumpre o objetivo central do projeto: permitir que turistas e moradores descubram e percorram pontos de interesse em Santos com aux\'ilio de um app m\'ovel.
+O Explora+ entregou uma \textbf{proposta de arquitetura validada}, demonstrando a viabilidade t\'ecnica de uma plataforma de turismo digital escal\'avel. A aprova\c{c}\~ao do PO e a demonstra\c{c}\~ao satisfat\'oria dos fluxos principais confirmam que a base est\'a pronta para suportar qualquer caminho comercial futuro, seja via parcerias, planos premium ou outros formatos a serem definidos na pr\'oxima fase.
 
-A principal mudan\c{c}a em rela\c{c}\~ao \`a proposta inicial foi a substitui\c{c}\~ao de APIs comerciais por alternativas abertas (Nominatim, OSRM, Overpass, Wikidata, Wikipedia), o que tornou o sistema mais sustent\'avel e independente de cotas e custos. O modelo de dados evoluiu de uma rota \emph{single-destination} para um planner multi-POI com cache sens\'ivel a prefer\^encias, personaliza\c{c}\~ao por usu\'ario e enriquecimento progressivo de conte\'udo.
+A principal mudan\c{c}a em rela\c{c}\~ao \`a proposta inicial foi a substitui\c{c}\~ao de APIs comerciais por alternativas abertas (Nominatim, OSRM, Overpass, Wikidata, Wikipedia), tornando o sistema sustent\'avel e independente de cotas e custos. O modelo de dados evoluiu de uma rota \emph{single-destination} para um planner multi-POI com cache sens\'ivel a prefer\^encias, personaliza\c{c}\~ao por usu\'ario e enriquecimento progressivo de conte\'udo. Mais do que um prot\'otipo acad\^emico, o Explora+ demonstra que uma plataforma de descoberta tur\'istica pode ser constru\'ida sobre dados abertos globais e implantada em qualquer munic\'ipio com acervo registrado no OpenStreetMap -- o que refor\c{c}a seu car\'ater extensionista e sua transfer\'encia de impacto para al\'em de Santos.
 
 \subsection{Justificativas t\'ecnicas das escolhas}
 
