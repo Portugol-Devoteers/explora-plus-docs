@@ -2,6 +2,22 @@
 
 Este documento detalha o ambiente de desenvolvimento, as decisoes de arquitetura e o fluxo de trabalho para os integrantes do grupo.
 
+Codigo e documentacao estao publicos na organizacao GitHub **EXPLORA-PLUS**: https://github.com/EXPLORA-PLUS
+
+---
+
+## Repositorios
+
+O projeto esta dividido em tres repositorios independentes dentro da org:
+
+| Repositorio | Papel |
+|---|---|
+| [`explora-plus-backend`](https://github.com/EXPLORA-PLUS/explora-plus-backend) | API Django + PostGIS — planner de rotas, catalogo de POIs, autenticacao |
+| [`explora-plus-frontend`](https://github.com/EXPLORA-PLUS/explora-plus-frontend) | App Expo / React Native — interface do usuario, mapa, biblioteca de lugares |
+| [`explora-plus-docs`](https://github.com/EXPLORA-PLUS/explora-plus-docs) | Documentacao, modelagem UML, diagramas Mermaid e paper academico |
+
+Cada repositorio tem seu proprio `README.md` com instrucoes de setup especificas.
+
 ---
 
 ## Por que Docker?
