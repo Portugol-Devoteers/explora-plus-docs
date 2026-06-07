@@ -3,7 +3,7 @@
 ## Opcao 1: Overleaf (recomendado para colaboracao)
 
 1. Acesse [overleaf.com](https://overleaf.com) e crie um projeto vazio
-2. Faca upload de todos os arquivos da pasta `paper/`:
+2. Faca upload de todos os arquivos da pasta `paper-pcg/`:
    - `main.tex`
    - `referencias.bib`
    - Pasta `figuras/` com os PNGs dos diagramas
@@ -26,17 +26,17 @@ As figuras ficam em `figuras/*.png` e sao geradas a partir dos `.mmd` em `../dia
 **Com Mermaid CLI instalado** (`npm install -g @mermaid-js/mermaid-cli`):
 
 ```bash
-cd diagramas/mermaid
+cd ../diagramas/mermaid
 
-mmdc -i er.mmd                    -o ../paper/figuras/er.png                    -w 1400
-mmdc -i casos-de-uso.mmd          -o ../paper/figuras/casos-de-uso.png          -w 1200
-mmdc -i classes.mmd               -o ../paper/figuras/classes.png               -w 1400
-mmdc -i componentes.mmd           -o ../paper/figuras/componentes.png           -w 1200
-mmdc -i implantacao.mmd           -o ../paper/figuras/implantacao.png           -w 1200
-mmdc -i sequencia-gerar-rota.mmd  -o ../paper/figuras/sequencia-gerar-rota.png  -w 1400
-mmdc -i sequencia-detalhe-poi.mmd -o ../paper/figuras/sequencia-detalhe-poi.png -w 1400
-mmdc -i sequencia-marcar-visitado.mmd -o ../paper/figuras/sequencia-marcar-visitado.png -w 1200
-mmdc -i atividade-explorar.mmd    -o ../paper/figuras/atividade-explorar.png    -w 1200
+mmdc -i er.mmd                    -o ../paper-pcg/figuras/er.png                    -w 1400
+mmdc -i casos-de-uso.mmd          -o ../paper-pcg/figuras/casos-de-uso.png          -w 1200
+mmdc -i classes.mmd               -o ../paper-pcg/figuras/classes.png               -w 1400
+mmdc -i componentes.mmd           -o ../paper-pcg/figuras/componentes.png           -w 1200
+mmdc -i implantacao.mmd           -o ../paper-pcg/figuras/implantacao.png           -w 1200
+mmdc -i sequencia-gerar-rota.mmd  -o ../paper-pcg/figuras/sequencia-gerar-rota.png  -w 1400
+mmdc -i sequencia-detalhe-poi.mmd -o ../paper-pcg/figuras/sequencia-detalhe-poi.png -w 1400
+mmdc -i sequencia-marcar-visitado.mmd -o ../paper-pcg/figuras/sequencia-marcar-visitado.png -w 1200
+mmdc -i atividade-explorar.mmd    -o ../paper-pcg/figuras/atividade-explorar.png    -w 1200
 ```
 
 **Alternativa online:** cole o conteudo de cada `.mmd` no [Mermaid Live Editor](https://mermaid.live) e exporte como PNG para a pasta `figuras/`.
@@ -44,14 +44,14 @@ mmdc -i atividade-explorar.mmd    -o ../paper/figuras/atividade-explorar.png    
 ### Compilar o PDF
 
 ```bash
-cd paper
+cd paper-pcg
 pdflatex main.tex
 biber main
 pdflatex main.tex
 pdflatex main.tex
 ```
 
-O arquivo `main.pdf` sera gerado na pasta `paper/`.
+O arquivo `main.pdf` sera gerado na pasta `paper-pcg/`.
 
 ### Script de build completo (bash/WSL)
 
@@ -60,7 +60,7 @@ O arquivo `main.pdf` sera gerado na pasta `paper/`.
 set -e
 BASE="$(cd "$(dirname "$0")/.." && pwd)"
 MMD="$BASE/diagramas/mermaid"
-FIG="$BASE/paper/figuras"
+FIG="$BASE/paper-pcg/figuras"
 mkdir -p "$FIG"
 
 for f in er casos-de-uso classes componentes implantacao \
@@ -69,12 +69,12 @@ for f in er casos-de-uso classes componentes implantacao \
   mmdc -i "$MMD/$f.mmd" -o "$FIG/$f.png" -w 1400
 done
 
-cd "$BASE/paper"
+cd "$BASE/paper-pcg"
 pdflatex main.tex
 biber main
 pdflatex main.tex
 pdflatex main.tex
-echo "PDF gerado em paper/main.pdf"
+echo "PDF gerado em paper-pcg/main.pdf"
 ```
 
 ## Pacotes LaTeX necessarios
